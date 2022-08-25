@@ -1,14 +1,14 @@
-import {Sequelize} from 'sequelize';
+import mongoose from 'mongoose';
 
 abstract class Config {
-    private _configConnection:Sequelize = new Sequelize('DistriLida', 'root', '',{
-        dialect: 'mysql',
-        host : 'localhost',
-        port: 3306
-    })
+    private _configConnection:any = mongoose.connect('mongodb://localhost:27017/distrilida')
 
     protected async autenticate(){
-        await this._configConnection.authenticate();
+        if (this._configConnection) {
+            return await this._configConnection;
+        }else {
+            throw new Error("Error the connected to database");
+        }
     }
 
     get configConnection(){
